@@ -35,6 +35,8 @@ Cycle between connected USB webcams and built-in sensors with the header switche
 
 ### 5. Hardened, Zero-Privilege Security Architecture
 * **Direct Argv Execution**: All hardware adjustments invoke `/usr/bin/v4l2-ctl` via structured argument vectors—no shell wrappers, no `bash -c`, no string concatenation, and no command-line leakage.
+* **Producer-Side Output Capping & Deadlines**: Hardware control querying runs under a hard 2-second timeout and 32 KiB stdout cap (`head -c 32768`), automatically reaping child processes and preventing memory growth in the persistent shell.
+* **Strict PlainText Rendering**: All device-supplied strings and metadata are explicitly rendered as `Text.PlainText`, preventing rich-text/HTML interpretation and unauthorized remote image loads.
 * **Strict Parameter Allowlisting**: Every control parameter is validated against an explicit whitelist and device paths are verified against strict `/^\/dev\/video\d+$/` patterns.
 * **Unprivileged**: Operates entirely within standard user permissions (`video` group).
 

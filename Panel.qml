@@ -184,6 +184,8 @@ Panel {
 
   function refresh() {
     if (!/^\/dev\/video\d+$/.test(root.activeDevicePath)) return
+    if (queryProc.running) return
+    queryDeadlineTimer.restart()
     queryProc.running = true
   }
 
@@ -291,11 +293,28 @@ Panel {
 
   Process {
     id: queryProc
-    command: ["/usr/bin/v4l2-ctl", "-d", root.activeDevicePath, "-l"]
+    command: [
+      Qt.resolvedUrl("query-controls.sh").replace(/^file:\/\//, ""),
+      root.activeDevicePath
+    ]
+    onStarted: {
+      queryDeadlineTimer.restart()
+    }
+    onExited: function(exitCode, exitStatus) {
+      queryDeadlineTimer.stop()
+      queryKillTimer.stop()
+    }
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
-        var lines = (text || "").split("\n")
+        var raw = String(text || "")
+        if (raw.length > 32768) {
+          raw = raw.substring(0, 32768)
+        }
+        var lines = raw.split("\n")
+        if (lines.length > 150) {
+          lines = lines.slice(0, 150)
+        }
         var lineRe = /^\s*([a-z0-9_]+)\s+[0-9a-fx]+\s+\([a-z]+\)\s*:\s*(.*)$/i
         var valRe = /value=(-?\d+)/
         var minRe = /min=(-?\d+)/
@@ -354,6 +373,30 @@ Panel {
     }
   }
 
+  Timer {
+    id: queryDeadlineTimer
+    interval: 2500
+    repeat: false
+    onTriggered: {
+      if (queryProc.running) {
+        queryProc.signal(15) // SIGTERM
+        queryKillTimer.start()
+      }
+    }
+  }
+
+  Timer {
+    id: queryKillTimer
+    interval: 500
+    repeat: false
+    onTriggered: {
+      if (queryProc.running) {
+        queryProc.signal(9) // SIGKILL
+        queryProc.running = false
+      }
+    }
+  }
+
   KeyboardPanel {
     id: panel
     anchorItem: root.anchorItem
@@ -401,6 +444,7 @@ Panel {
               anchors.verticalCenter: parent.verticalCenter
               Text {
                 text: "CAMARCHY CONTROL"
+                textFormat: Text.PlainText
                 color: root.barForeground
                 font.bold: true
                 font.pixelSize: Style.font.bodySmall
@@ -408,6 +452,7 @@ Panel {
               }
               Text {
                 text: root.cleanDeviceTitle(root.activeDeviceName) + " (" + root.activeDevicePath + ")"
+                textFormat: Text.PlainText
                 color: root.barForeground
                 opacity: 0.6
                 font.pixelSize: Style.space(10)
@@ -499,6 +544,7 @@ Panel {
                 Text {
                   anchors.horizontalCenter: parent.horizontalCenter
                   text: "󰄀"
+                  textFormat: Text.PlainText
                   color: Color.accent
                   font.pixelSize: Style.font.title
                 }
@@ -506,6 +552,7 @@ Panel {
                 Text {
                   anchors.horizontalCenter: parent.horizontalCenter
                   text: "Camera in use by active call/app"
+                  textFormat: Text.PlainText
                   color: root.barForeground
                   font.bold: true
                   font.pixelSize: Style.font.bodySmall
@@ -515,6 +562,7 @@ Panel {
                 Text {
                   anchors.horizontalCenter: parent.horizontalCenter
                   text: "Hardware tuning controls below remain active"
+                  textFormat: Text.PlainText
                   color: root.barForeground
                   opacity: 0.6
                   font.pixelSize: Style.font.caption
