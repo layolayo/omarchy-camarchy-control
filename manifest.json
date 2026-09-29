@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.layolayo.camarchy-control",
+  "name": "Camarchy Control",
+  "version": "1.0.0",
+  "author": "Matthew Hudson",
+  "license": "MIT",
+  "description": "Hardware webcam controls (exposure, sharpness, contrast, presets) and live viewfinder for Omarchy",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Camarchy",
+    "description": "Hardware camera control panel and live tuning",
+    "category": "Media",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
