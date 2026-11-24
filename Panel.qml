@@ -4,6 +4,7 @@ import QtMultimedia
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 Panel {
@@ -435,7 +436,7 @@ Panel {
 
             Text {
               text: "󰄀"
-              color: Color.accent
+              color: Commons.Color.accent
               font.pixelSize: Style.font.subtitle
               anchors.verticalCenter: parent.verticalCenter
             }
@@ -485,7 +486,7 @@ Panel {
             PanelActionButton {
               iconText: root.showPreview ? "󰕦" : "󰕧"
               tooltipText: root.showPreview ? "Hide live viewfinder" : "Show live viewfinder"
-              foreground: root.showPreview ? Color.accent : root.barForeground
+              foreground: root.showPreview ? Commons.Color.accent : root.barForeground
               fontFamily: root.bar ? root.bar.fontFamily : Style.font.family
               onClicked: root.showPreview = !root.showPreview
             }
@@ -520,7 +521,7 @@ Panel {
             radius: Style.cornerRadius
             color: "#0a0e14"
             clip: true
-            border.color: Color.accent
+            border.color: Commons.Color.accent
             border.width: 1
 
             VideoOutput {
@@ -545,7 +546,7 @@ Panel {
                   anchors.horizontalCenter: parent.horizontalCenter
                   text: "󰄀"
                   textFormat: Text.PlainText
-                  color: Color.accent
+                  color: Commons.Color.accent
                   font.pixelSize: Style.font.title
                 }
 
@@ -581,7 +582,7 @@ Panel {
               PanelActionButton {
                 iconText: "󰁨"
                 tooltipText: root.mirrorPreview ? "Mirror: ON (natural view)" : "Mirror: OFF (direct view)"
-                foreground: root.mirrorPreview ? Color.accent : root.barForeground
+                foreground: root.mirrorPreview ? Commons.Color.accent : root.barForeground
                 bordered: true
                 fontFamily: root.bar ? root.bar.fontFamily : Style.font.family
                 onClicked: root.mirrorPreview = !root.mirrorPreview
@@ -728,7 +729,7 @@ Panel {
               anchors.right: parent.right
               anchors.baseline: sharpnessLbl.baseline
               text: root.sharpness + " / " + root.sharpnessMax
-              color: Color.accent
+              color: Commons.Color.accent
               font.bold: true
               font.pixelSize: Style.font.bodySmall
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
@@ -790,7 +791,7 @@ Panel {
               anchors.right: parent.right
               anchors.baseline: brightnessLbl.baseline
               text: root.brightness + " / " + root.brightnessMax
-              color: Color.accent
+              color: Commons.Color.accent
               font.bold: true
               font.pixelSize: Style.font.bodySmall
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
@@ -852,7 +853,7 @@ Panel {
               anchors.right: parent.right
               anchors.baseline: contrastLbl.baseline
               text: root.contrast + " / " + root.contrastMax
-              color: Color.accent
+              color: Commons.Color.accent
               font.bold: true
               font.pixelSize: Style.font.bodySmall
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
@@ -914,7 +915,7 @@ Panel {
               anchors.right: parent.right
               anchors.baseline: satLbl.baseline
               text: root.saturation + " / " + root.saturationMax
-              color: Color.accent
+              color: Commons.Color.accent
               font.bold: true
               font.pixelSize: Style.font.bodySmall
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
@@ -976,7 +977,7 @@ Panel {
               anchors.right: parent.right
               anchors.baseline: gammaLbl.baseline
               text: root.gamma + " / " + root.gammaMax
-              color: Color.accent
+              color: Commons.Color.accent
               font.bold: true
               font.pixelSize: Style.font.bodySmall
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
